@@ -93,17 +93,5 @@
       value: disabled
       no_extra_spaces: yes
 
-  - name: Install RPM signing key for PowerTools
-    rpm_key:
-      key: http://mirror.centos.org/centos/RPM-GPG-KEY-CentOS-Official
-      state: present
-  
-  - name: Configure CentOS PowerTools repository
-    yum_repository:
-      name: PowerTools
-      description: CentOS PowerTools
-      mirrorlist: http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=PowerTools&infra=$infra
-      state: present
-      gpgcheck: yes
-  
+
 ...
