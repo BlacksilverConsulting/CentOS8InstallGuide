@@ -3,6 +3,9 @@
   hosts: localhost
   remote_user: root
 
+# This is a mess and needs to be re-thought.
+# I suspect @server-product-environment now has GUI dependencies
+
   tasks:
   - name: Workaround for libstoragemgmt
     yum:
@@ -23,6 +26,8 @@
       - "@headless-management"
       state:  present
   
+# TODO: Check these package names against OS
+
   - name: Individual packages
     yum:
       name:
@@ -46,8 +51,10 @@
       - 'xinetd'
       - 'zlib-devel'
 
+# Do we still need this? 
+
   - name: Unpriviledged support account
     user:
-      name: support
-  
-  
+      name: support 
+      
+  # TODO The rest of the base setup.

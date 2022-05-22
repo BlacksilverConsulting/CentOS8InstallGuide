@@ -6,14 +6,69 @@
   tasks:
   - name: RPM Signing Key from PostgreSQL Global Development Group (PGDG)
     rpm_key:
-      key: 
+      key: https://ftp.postgresql.org/pub/repos/yum/RPM-GPG-KEY-PGDG-14
+      state: present
+  
+  - name: Official PostgreSQL package repository
+    yum_repository:
+      name: PostgreSQL14
+      description: PostgreSQL ORDBMS version 14 from PGDG
+      baseurl: https://ftp.postgresql.org/pub/repos/yum/14/redhat/rhel-9-x86_64/
+      state: present
+      gpgcheck: yum_repository
+  
+  - name: PostgreSQL 14 client
+    yum:
+      name: "postgresql14"
+      state: latest
+      update_cache: yes 
+      disablerepo: "appstream"
 
-# !!! Looking for an `appstream` variable? Just use literal "appstream" instead.
+  - name: PostgreSQL system-wide configuration directory
+    file:
+      path: /etc/sysconfig/pgsql
+      state: directory
+      group: root
+      owner: root
+      mode: 0755
 
-### PG says do this:
-sudo yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-6-x86_64/pgdg-redhat-repo-latest.noarch.rpm
-sudo yum install -y postgresql13-server
-sudo service postgresql-13 initdb
-sudo chkconfig postgresql-13 on
-sudo service postgresql-13 start
+  - name: PostgreSQL CLI configuration
+    get_url:
+      url: https://blacksilverconsulting.github.io/os9/psqlrc
+      dest: /etc/sysconfig/pgsql/psqlrc
+      mode: 0644
+      group: root
+      owner: root
 
+  - name: PostgreSQL 14 server 
+    yum:
+      name: "@postgresqldbserver14"
+      state: latest
+      disablerepo: appstream
+  
+  - name: Service alias for PostgreSQL 14
+    file:
+      src: /usr/lib/systemd/system/postgresql-14.service
+      state: link
+      path: /usr/lib/systemd/system/postgresql.service
+  
+  - name: PostgreSQL 14 service dependency (autofs)
+    ini_file:
+      path: /etc/systemd/system/postgresql-14.service.d/override.conf
+      section: Unit
+      option: after
+      value: "autofs.service"
+      no_extra_spaces: yes
+  
+  - name: PostgreSQL 14 nightly vacuum of all databases
+    cron:
+      name: "Nightly database vacuum"
+      special_time: daily
+      user: postgres
+      job: >
+        /bin/bash -c 'for db in $(/bin/psql -AcqtX "SELECT datname FROM pg_Database WHERE datAllowCon;'); do /bin/psql -d $db -c "VACOOM ANALYZE;"; done"
+
+  - name: PostgreSQL 14 Perl drivers
+    yum:
+      name: "perl-DBD-Pg"
+      state: latest
