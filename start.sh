@@ -6,7 +6,7 @@ set -o errexit
 # See LICENSE file for license information
 
 # Invocation (run as root, soory):
-#  cd && curl https://github.com/BlacksilverConsulting/CentOS8InstallGuide/start.sh && bash start.sh
+#  cd && curl https://blacksilverconsulting.github.io/CentOS8InstallGuide/start.sh && bash start.sh
 
 # Description:
 #  This script is designed to start the process of setting up a new install of
@@ -27,7 +27,7 @@ dnf -y install ${REPO}
 dnf -y install python3 python3-rpm python3-pycurl sshpass Ansible
 
 # Download the playbook, leaving a copy in the current directory
-curl https://github.com/BlacksilverConsulting/CentOS8InstallGuide/base.yaml
+curl https://blacksilverconsulting.github.io/CentOS8InstallGuide/base.yaml
 ansible-playbook ./base.yaml
 
 echo Initial configuration complete.
