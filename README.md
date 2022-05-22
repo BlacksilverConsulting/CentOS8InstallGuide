@@ -1,3 +1,30 @@
+# CentOS 8 / Oracle Linux 8 Setup Guide
+
+## Upgrade from Scientific Linux 6
+
+### Hyper-V
+
+### VMware
+
+### Azure
+
+## OS Installation
+
+## Ansible Bootstrap
+
+Sign in to the VM as root and run this command:
+
+```bash
+cd && curl -O https://blacksilverconsulting.github.io/OS8/start.sh && bash start.sh
+```
+
+## (Optional) PostgreSQL 13
+
+## (Optional) Document Management Support
+
+
+-----
+
 ## Welcome to GitHub Pages
 
 You can use the [editor on GitHub](https://github.com/BlacksilverConsulting/CentOS8InstallGuide/edit/main/README.md) to maintain and preview the content for your website in Markdown files.
