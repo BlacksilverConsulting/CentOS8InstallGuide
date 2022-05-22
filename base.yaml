@@ -6,20 +6,23 @@
 # This is a mess and needs to be re-thought.
 # I suspect @server-product-environment now has GUI dependencies
 
+  vars:
+    unprivuser: support
+
   tasks:
-  - name: Workaround for libstoragemgmt
+  - name: Workaround libstoragemgmt dependency
     yum:
       name:
       - 'libstoragemgmt'
       state: latest
   
-  - name: Environment package groups
+  - name: Install environment package groups
     yum:
       name:
       - "@server-product-environment"
       state: present
   
-  - name: Regular package groups
+  - name: Install regular package groups
     yum:
       name:
       - "@development"
@@ -28,7 +31,7 @@
   
 # TODO: Check these package names against OS
 
-  - name: Individual packages
+  - name: Install individual packages
     yum:
       name:
       - 'autofs'
@@ -51,10 +54,32 @@
       - 'xinetd'
       - 'zlib-devel'
 
-# Do we still need this? 
+  - name: Start autofs service with OS
+    service:
+      name: autofs
+      enabled: yes
+      state: started
+  
+  - name: Configure lftp
 
-  - name: Unpriviledged support account
+  - name: Create unpriviledged account
     user:
-      name: support 
-      
+      name: "{{unprivuser}}"
+
+  - name: Configure unpriviledged account authorized_keys
+    get_url:
+      url: https://blacksilverconsulting.github.io/OS9/authorized_keys
+      owner: "{{unprivuser}}"
+      group: "{{unprivuser}}"
+      mode: "0600"
+      dest: "/home/{{unprivuser}}/.ssh"
+  
+  - name: Disable SELinux
+    ini_file:
+      path: /etc/selinux/config
+      section: null
+      option: SELINUX
+      value: disabled
+      no_extra_spaces: yes
+  
   # TODO The rest of the base setup.
