@@ -20,8 +20,10 @@ set -o errexit
 # Enable EPEL
 dnf -y install epel-release epel-next-release
 
-# Install Ansible and dependencies, not in that order
-dnf -y install python3 python3-rpm python3-pycurl sshpass Ansible
+# Install Ansible and dependencies, can't be combined with EPEL
+dnf -y install python3 python3-rpm python3-pycurl sshpass ansible-core \
+ansible-collection-ansible-posix ansible-collection-community-general \
+ansible-collection-redhat-rhel_mgmt 
 
 # Download the playbook, leaving a copy in the current directory
 curl -O https://blacksilverconsulting.github.io/OS9/base.yaml
