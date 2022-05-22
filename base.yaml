@@ -1,0 +1,53 @@
+---
+- name: Core congfiguration for CentOS 9
+  hosts: localhost
+  remote_user: root
+
+  tasks:
+  - name: Workaround for libstoragemgmt
+    yum:
+      name:
+      - 'libstoragemgmt'
+      state: latest
+  
+  - name: Environment package groups
+    yum:
+      name:
+      - "@server-product-environment"
+      state: present
+  
+  - name: Regular package groups
+    yum:
+      name:
+      - "@development"
+      - "@headless-management"
+      state:  present
+  
+  - name: Individual packages
+    yum:
+      name:
+      - 'autofs'
+      - 'bind-utils'
+      - 'expat'
+      - 'expat-devel'
+      - 'htop'
+      - 'lftp'
+      - 'lsof'
+      - 'ncftp'
+      - 'ncurses-devel'
+      - 'openssh-server'
+      - 'openssl-devel'
+      - 'openvm-tools'
+      - 'python3-firewall'
+      - 'python3-lxml'
+      - 'redhat-lsb-core'
+      - 'sudo'
+      - 'tmpwatch'
+      - 'xinetd'
+      - 'zlib-devel'
+
+  - name: Unpriviledged support account
+    user:
+      name: support
+  
+  
