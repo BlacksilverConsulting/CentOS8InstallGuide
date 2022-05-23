@@ -46,6 +46,27 @@
     - 'scanner:$6$mysecretsalt$72YAmKvuS9HRllA6nWWV4JR.D54TrkIMrv3y3zZzdwHDg2ndAZu9z2veyGJgsl8op/CmzPRJEndLRVkWSzdSO.'
     - 'templates:$6$mysecretsalt$6TRIJ6gQhES4dFSHvGfzF0aDTW21Y6lVs.pHnT.rx9OZr8kVmADRwreqPxfFtVJR5z8HkGmJUN.60blLWXanR/'
 
+  - name: Create /etc/mail directory
+    file:
+      path: /etc/mail
+      state: directory
+      owner: mail
+      group: mail
+
+  - name: Add 'listener' to sendmail trusted users
+    lineinfile:
+      path: /etc/mail/trusted-users
+      create: yes
+      owner: mail
+      group: mail
+      line: 'listener'
+
+  - name: Provide /etc/init.d for applications that reuiqre it
+    file:
+      state: link
+      src: /etc/rc.d/init.d
+      path: /etc/init.d
+
   - name: Install required groups
     yum:
       name:
@@ -55,6 +76,7 @@
 
   - name: Install additional packages
     yum:
+      state: latest
       name:
       - 'expat'
       - 'expat-devel'
@@ -65,6 +87,33 @@
       - 'sendmail'
       - 'sendmail-cf'
       - 'vsftpd'
+      - 'foomatic-db'
+      - 'ImageMagick-perl'
+      - 'ImageMagick'
+      - 'samba'
+      - 'samba-client'
+      - 'cifs-utils'
+      - 'httpd'
+      - 'perl-App-cpanminus'
+      - 'perl-IO-CaptureOutput'
+      - 'perl-URI-Encode'
+      - 'perl-Class-Std'
+      - 'perl-IO-Compress'
+      - 'perl-Date-Manip'
+      - 'perl-XML-Simple'
+      - 'perl-Archive-Zip'
+      - 'perl-XML-XPath'
+      - 'perl-Compress-Raw-Zlib'
+      - 'perl-Term-ReadLine-Gnu'
+      - 'perl-LWP-Protocol-https'
+      - 'perl-JSON-PP'
+      - 'perl-String-ShellQuote'
+      - 'perl-CGI'
+      - 'perl-Parse-RecDescent'
+      - 'perl-IO-Capture'
+      - 'foomatic'
+      - 'freetds'
+      - 'freetds-devel'
 
   - name: Configure required services to start automatically
     service:
@@ -101,6 +150,42 @@
     - ftp
     - http
 
+  - name: Change ImageMagick policy XML 1/4
+    xml:
+      path: "/etc/ImageMagick-6/policy.xml"
+      xpath: '/policymap/policy[@pattern="TEXT"]'
+      state: present
+      attribute: domain
+      value: coder
+      pretty_print: yes
+
+  - name: Change ImageMagick policy XML 2/4
+    xml:
+      path: "/etc/ImageMagick-6/policy.xml"
+      xpath: '/policymap/policy[@pattern="TEXT"]'
+      state: present
+      attribute: rights
+      value: read
+      pretty_print: yes
+
+  - name: Change ImageMagick policy XML 3/4
+    xml:
+      path: "/etc/ImageMagick-6/policy.xml"
+      xpath: '/policymap/policy[@pattern="LABEL"]'
+      state: present
+      attribute: domain
+      value: coder
+      pretty_print: yes
+
+  - name: Change ImageMagick policy XML 4/4
+    xml:
+      path: "/etc/ImageMagick-6/policy.xml"
+      xpath: '/policymap/policy[@pattern="LABEL"]'
+      state: present
+      attribute: rights
+      value: read
+      pretty_print: yes
+
   - name: Install RPM signing key for PowerTools
     rpm_key:
       key: http://mirror.centos.org/centos/RPM-GPG-KEY-CentOS-Official
@@ -133,5 +218,35 @@
       - texinfo-tex.x86_64
       state: latest
       enablerepo: "{{ powertoolsreponame }}"
+
+  - name: install cpan modules
+    cpanm:
+      name: "{{ item }}"
+      notest: yes
+    environment:
+      SYBASE: '/usr'
+    loop:
+    - 'Any::Daemon'
+    - 'Class::Std::Fast'
+    - 'DBD::Sybase'
+    - 'IO::Pty'
+    - 'IO::Tty'
+    - 'List::MoreUtils'
+    - 'Log::LogLite'
+    - 'Log::Report'
+    - 'Mail::POP3Client'
+    - 'MIME::Lite'
+    - 'Net::Azure::StorageClient'
+    - 'Net::FTP::Common'
+    - 'Net::LDAP'
+    - 'Net::SFTP::Foreign'
+    - 'Params::Validate'
+    - 'Params::Validate::Checks'
+    - 'SOAP::WSDL'
+    - 'Term::ReadKey'
+    - 'Test::Pod'
+    - 'URI::sftp'
+    - 'XML::Compile::SOAP::Daemon::AnyDaemon'
+    - 'XML::Tidy'
 
 ...
