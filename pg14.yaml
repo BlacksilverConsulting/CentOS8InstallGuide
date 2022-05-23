@@ -15,7 +15,6 @@
       description: PostgreSQL ORDBMS version 14 from PGDG
       baseurl: https://ftp.postgresql.org/pub/repos/yum/14/redhat/rhel-9-x86_64/
       state: present
-      gpgcheck: yes 
   
   - name: Install PostgreSQL 14 client
     yum:

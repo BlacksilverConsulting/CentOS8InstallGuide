@@ -92,7 +92,6 @@
       description: CentOS PowerTools
       mirrorlist: http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=PowerTools&infra=$infra
       state: present
-      gpgcheck: yes
   
   - name: Install packages from PowerTools
     yum:
