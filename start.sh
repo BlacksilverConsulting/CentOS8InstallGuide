@@ -26,13 +26,13 @@ ansible-collection-ansible-posix ansible-collection-community-general \
 ansible-collection-redhat-rhel_mgmt 
 
 # Download the playbook, leaving a copy in the current directory
-curl -O https://blacksilverconsulting.github.io/OS9/base.yaml
+curl -LJO https://github.com/BlacksilverConsulting/OS9/raw/main/base.yaml
 ansible-playbook ./base.yaml
 
 echo Initial configuration complete.
 
 echo To install PostgreSQL 14 Server and Client:
-echo curl -O https://blacksilverconsulting.github.io/OS9/pg14.yaml && ansible-playbook ./pg14.yaml
+echo curl -LJO https://github.com/BlacksilverConsulting/OS9/raw/main/pg14.yaml && ansible-playbook ./pg14.yaml
 
 echo To install other components useful for document management:
-echo curl -O https://blacksilverconsulting.github.io/OS9/dm.yaml && ansible-playbook ./dm.yaml
+echo curl -LJO https://github.com/BlacksilverConsulting/OS9/raw/main/dm.yaml && ansible-playbook ./dm.yaml
