@@ -28,28 +28,20 @@
       - "@development"
       - "@headless-management"
       state:  present
-  
-# TODO: Check these package names against OS
 
   - name: Install individual packages
     yum:
       name:
       - 'autofs'
       - 'bind-utils'
-      - 'expat'
-      - 'expat-devel'
       - 'htop'
       - 'lftp'
       - 'lsof'
-      - 'ncftp'
-      - 'ncurses-devel'
       - 'openssh-server'
-      - 'openssl-devel'
       - 'python3-firewall'
       - 'python3-lxml'
       - 'sudo'
       - 'tmpwatch'
-      - 'zlib-devel'
 
   - name: Start autofs service with OS
     service:

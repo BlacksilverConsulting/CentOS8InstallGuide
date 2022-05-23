@@ -4,16 +4,16 @@
   hosts: localhost
   remote_user: root
 
+  vars:
+    appgroupname: imaging
+    powertoolsreponame: PowerTools
+
   handlers:
   - name: Restart FTP server
     service:
       name: vsftpd
       enabled: yes
       state: restarted
-
-  vars:
-    appgroupname: imaging
-    powertoolsreponame: PowerTools
 
   tasks:
   - name: Create application group
@@ -45,6 +45,26 @@
     - 'qc:$6$mysecretsalt$mJ8RHipTJVhNyEmCexor4HTxNrcimKwOlCo8qpuX5UDe9HryH7qf10rvz1z5tLWulk8HS04/ROdPNxWpDUiK0.'
     - 'scanner:$6$mysecretsalt$72YAmKvuS9HRllA6nWWV4JR.D54TrkIMrv3y3zZzdwHDg2ndAZu9z2veyGJgsl8op/CmzPRJEndLRVkWSzdSO.'
     - 'templates:$6$mysecretsalt$6TRIJ6gQhES4dFSHvGfzF0aDTW21Y6lVs.pHnT.rx9OZr8kVmADRwreqPxfFtVJR5z8HkGmJUN.60blLWXanR/'
+
+  - name: Install required groups
+    yum:
+      name:
+      - "@smb-server"
+      - "@web-server"
+      state: present
+
+  - name: Install additional packages
+    yum:
+      name:
+      - 'expat'
+      - 'expat-devel'
+      - 'ncftp'
+      - 'ncurses-devel'
+      - 'openssl-devel'
+      - 'zlib-devel'
+      - 'sendmail'
+      - 'sendmail-cf'
+      - 'vsftpd'
 
   - name: Configure required services to start automatically
     service:
