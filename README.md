@@ -129,9 +129,17 @@ The shell script ends with instructions for downloading and running two addition
 
 **COMING SOON**
 
+```bash
+cd && curl -LJO https://github.com/BlacksilverConsulting/OS9/raw/main/pg14.yaml && ansible-playbook ./pg14.yaml
+```
+
 ## (Optional) Document Management Support
  
 **COMING SOON**
+
+```bash
+cd && curl -LJO https://github.com/BlacksilverConsulting/OS9/raw/main/dm.yaml && ansible-playbook ./dm.yaml
+```
 
 ## Next steps
 

@@ -45,13 +45,10 @@
       - 'ncurses-devel'
       - 'openssh-server'
       - 'openssl-devel'
-      - 'openvm-tools'
       - 'python3-firewall'
       - 'python3-lxml'
-      - 'redhat-lsb-core'
       - 'sudo'
       - 'tmpwatch'
-      - 'xinetd'
       - 'zlib-devel'
 
   - name: Start autofs service with OS
