@@ -1,7 +1,7 @@
 # CentOS 9 Setup Guide
 
 
-## Hyper-V
+## Hyper-V Note
 
 VM Requirements:
 - Generation 2 VM
@@ -39,7 +39,7 @@ Click **Software Selection** to display the software selection screen.
 
 ![Image](/images/07-InstallType1.png)
 
-In the left column, click the circle next to **Minimal Install**. This change the list of options in the right column.
+In the left column, click the circle next to **Minimal Install**.
 
 ![Image](/images/08-InstallType2.png)
 
@@ -99,9 +99,13 @@ When the installation is complete, the Reboot System button in the lower-right w
 
 Click it and the install media will be ejected as the VM reboots. After the reboot, the OS boot menu will be displayed for a few seconds. 
 
+![Image](/images/22-OSBootMenu.png)
 
+The VM will display some startup information and end with a mostly-blank screen and a login prompt in the upper-left corner.
 
 ## Ansible Bootstrap
+
+After the OS is installed, there are a lot of setup steps. This project includes some scripts to automate setting up the server in a particular way.
 
 Sign in to the VM as root and run this command:
 
@@ -109,45 +113,23 @@ Sign in to the VM as root and run this command:
 cd && curl -O https://blacksilverconsulting.github.io/OS9/start.sh && bash start.sh
 ```
 
+This shell script does three things only:
+- Enable the EPEL repository
+- Install Ansible and required dependencies
+- Download and run the base [Ansible Playbook](/base.yaml)
+
+(To see what that playbook does, click the link.)
+
+The shell script ends with instructions for downloading and running two additional Ansible playbooks which are still works in progress.
+
 ## (Optional) PostgreSQL 14 Server and Client
 
+**COMING SOON**
+
 ## (Optional) Document Management Support
+ 
+**COMING SOON**
 
+## Next steps
 
------
-
-## Welcome to GitHub Pages
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/BlacksilverConsulting/CentOS8InstallGuide/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+After that, things get interesting. We can start attaching disks from other VMs, configuring applications, and getting ready to test.
