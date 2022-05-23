@@ -1,5 +1,8 @@
 # CentOS 9 Setup Guide
 
+These are my step-by-step instructions for installing CentOS 9.
+
+If you want them to do something else, the [fork button](https://github.com/BlacksilverConsulting/OS9) is right there.
 
 ## Hyper-V Note
 
