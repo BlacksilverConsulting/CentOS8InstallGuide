@@ -32,7 +32,7 @@ ansible-playbook ./base.yaml
 echo Initial configuration complete.
 
 echo To install PostgreSQL 14 Server and Client:
-echo curl -LJO https://github.com/BlacksilverConsulting/OS9/raw/main/pg14.yaml && ansible-playbook ./pg14.yaml
+echo 'curl -LJO https://github.com/BlacksilverConsulting/OS9/raw/main/pg14.yaml && ansible-playbook ./pg14.yaml'
 
 echo To install other components useful for document management:
-echo curl -LJO https://github.com/BlacksilverConsulting/OS9/raw/main/dm.yaml && ansible-playbook ./dm.yaml
+echo 'curl -LJO https://github.com/BlacksilverConsulting/OS9/raw/main/dm.yaml && ansible-playbook ./dm.yaml'
