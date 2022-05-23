@@ -4,11 +4,19 @@
 
 ### Hyper-V
 
+VM Requirements:
+- Generation 2 VM
+- Disable SecureBoot
+
 ### VMware
 
 ### Azure
 
 ## OS Installation
+
+Download the [CentOS 9 stream ISO](https://mirrors.ocf.berkeley.edu/centos-stream/9-stream/BaseOS/x86_64/iso/CentOS-Stream-9-latest-x86_64-dvd1.iso).
+
+Boot the VM from that .iso, and the install boot menu will appear:
 
 ## Ansible Bootstrap
 
