@@ -1,3 +1,9 @@
 theme: jekyll-theme-minimal
 exclude:
   - "*.yaml"
+defaults:
+  -
+    scope:
+      path: "*.yaml"
+    values:
+      image: true 
