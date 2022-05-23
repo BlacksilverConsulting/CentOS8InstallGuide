@@ -18,6 +18,14 @@ Download the [CentOS 9 stream ISO](https://mirrors.ocf.berkeley.edu/centos-strea
 
 Boot the VM from that .iso, and the install boot menu will appear:
 
+[Image](/images/01-InstallerBoot.png)
+
+Either press the Enter key or wait for the menu to count down. The installer will verify that the install image was not corrupted during download, then prompt you to choose the language to use during the install:
+
+[Image](/images/02-InstallLanguage.png)
+
+
+
 ## Ansible Bootstrap
 
 Sign in to the VM as root and run this command:
