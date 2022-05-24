@@ -8,3 +8,9 @@
 yum --hidden grouplist | grep -v ':' | sed 's/   //g' | xargs -d \\n yum --verbose groupinfo | grep Group-Id | sed 's/ Group-Id: //'
 ```
 
+**Turn off a repository**
+
+```bash
+dnf config-manager --disable PowerTools
+```
+
