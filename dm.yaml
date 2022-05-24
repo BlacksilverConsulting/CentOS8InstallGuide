@@ -203,16 +203,16 @@
       - gperf.x86_64
       - gsm-devel.x86_64
       - jbigkit-devel.x86_64
-      - latex2html.x86_64
+      - latex2html.noarch
       - lcms2-devel.x86_64
       - libtiff-tools.x86_64
-      - libv41-devel.x86_64
+#      - libv41-devel.x86_64
       - lockdev-devel.x86_64
       - perl-IPC-Run3.noarch
       - perl-Unicode-EastAsianWidth.noarch
-      - pygobject3-devel.x86_64
+#      - pygobject3-devel.x86_64
       - sharutils.x86_64
-      - text2html.noarch
+#      - text2html.noarch
       - texinfo.x86_64
       - texinfo-tex.x86_64
       state: latest
