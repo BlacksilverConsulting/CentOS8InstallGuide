@@ -188,6 +188,7 @@
   - name: Enable Code Ready Linux Builder (CRB) (Was PowerTools)
     yum_repository:
       name: "{{ powertoolsreponame }}"
+      file: "centos"
       description: "CentOS Stream $releasever - CRB"
       metalink: "https://mirrors.centos.org/metalink?repo=centos-crb-$stream&arch=$basearch&protocol=https,http"
       gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial"
