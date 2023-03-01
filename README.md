@@ -119,11 +119,10 @@ cd && curl -LJO https://github.com/BlacksilverConsulting/ImgOverlay/raw/main/sta
 This shell script does several things:
 - Enable the EPEL repository
 - Install Ansible and required dependencies
-- Download and run the base [Ansible Playbook](https://github.com/BlacksilverConsulting/ImgOverlay/raw/main/var/imaging/resources/ansible/base.yaml)
-- Download the playbooks used below
-- Download the [ImgOverlay repo](https://github.com/BlacksilverConsulting/ImgOverlay)
+- Download and run the [base](https://github.com/BlacksilverConsulting/ImgOverlay/raw/main/var/imaging/resources/ansible/base.yaml) Ansible playbook
+- Download the [pg14](https://github.com/BlacksilverConsulting/ImgOverlay/raw/main/var/imaging/resources/ansible/pg14.yaml) and [dm](https://github.com/BlacksilverConsulting/ImgOverlay/raw/main/var/imaging/resources/ansible/dm.yaml) Ansible playbooks used below
 
-(To see what that playbook does, click the link.)
+(To see what each  playbook does, click the link.)
 
 The shell script ends with instructions for downloading and running two additional Ansible playbooks which are still works in progress.
 
