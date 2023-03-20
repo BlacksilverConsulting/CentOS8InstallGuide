@@ -113,18 +113,18 @@ After the OS is installed, there are a lot of setup steps. This project includes
 Sign in to the VM as root and run this command:
 
 ```bash
-cd && curl -LJO https://github.com/BlacksilverConsulting/ImgOverlay/raw/main/start.sh && bash start.sh
+cd && curl -LJO https://blacksilverconsulting.github.io/OS9/start.sh && bash start.sh
 ```
 
 This shell script does several things:
 - Enable the EPEL repository
 - Install Ansible and required dependencies
-- Download and run the [base](https://github.com/BlacksilverConsulting/ImgOverlay/raw/main/var/imaging/resources/ansible/base.yaml) Ansible playbook
-- Download the [pg14](https://github.com/BlacksilverConsulting/ImgOverlay/raw/main/var/imaging/resources/ansible/pg14.yaml) and [dm](https://github.com/BlacksilverConsulting/ImgOverlay/raw/main/var/imaging/resources/ansible/dm.yaml) Ansible playbooks used below
+- Download and run the [base](https://blacksilverconsulting.github.io/OS9/base.yaml) Ansible playbook
+- Download the [pg14](https://blacksilverconsulting.github.io/OS9/pg14.yaml) and [dm](https://blacksilverconsulting.github.io/OS9/dm.yaml) Ansible playbooks used below
 
-(To see what each  playbook does, click the link.)
+(To see what each playbook does, click the link.)
 
-The shell script ends with instructions for downloading and running two additional Ansible playbooks which are still works in progress.
+The shell script ends with instructions for downloading and running two additional Ansible playbooks.
 
 ## (Optional) PostgreSQL 14 Server and Client
 
