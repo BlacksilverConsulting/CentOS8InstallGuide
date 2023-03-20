@@ -41,14 +41,14 @@
       - 'lftp'
       - 'lsof'
       - 'openssh-server'
-      # This right here is why we can't have nice things.
-      #  some of the Python modules needed for Ansible are
-      #  bound to python39, and some are bound to python3.11
-      #  and one Ansible script can't be both, but dm.yaml
-      #  needs to.
+      # These three Python modules are needed by Ansible later.
+      #  By default, Ansible is using Python 3.11. But all of 
+      #  these modules are built for Python 3.9. So Ansible
+      #  playbooks that want to use them must specify 
+      #  that their python interpreter is /usr/bin/python3.9.
       - 'python3-firewall'
-      - 'python3.11-lxml'
-      - 'python3.11-psycopg2'
+      - 'python3-lxml'
+      - 'python3-psycopg2'
       - 'sudo'
       - 'tmpwatch'
       - 'console-login-helper-messages-issuegen'
