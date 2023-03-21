@@ -11,7 +11,7 @@
     ansible_python_interpreter: /usr/bin/python3.9
     appgroupname: imaging
     overlay: /root/ImgOverlay-main/var/imaging/resources
-    overlay_rpms: "{{overlay}}/RPM/CentOS-{{ansible_distribution_major_version}}"
+    rpms: "https://github.com/BlacksilverConsulting/OS9/raw/main/RPM"
 
   handlers:
   - name: Restart FTP server
@@ -128,6 +128,7 @@
       - 'samba-client'
       - 'cifs-utils'
       - 'httpd'
+      - 'perl-DBI'
       - 'perl-App-cpanminus'
       - 'perl-IO-CaptureOutput'
       - 'perl-URI-Encode'
@@ -144,6 +145,8 @@
       - 'perl-String-ShellQuote'
       - 'perl-CGI'
       - 'perl-Parse-RecDescent'
+      - 'perl-Class-Std-Fast'
+      - 'perl-MIME-Lite'
       - 'foomatic'
       - 'freetds'
       - 'freetds-devel'
@@ -282,7 +285,6 @@
       SYBASE: '/usr'
     loop:
     - 'Any::Daemon'
-    - 'Class::Std::Fast'
     - 'DBD::Sybase'
     - 'IO::Pty'
     - 'IO::Tty'
@@ -290,7 +292,6 @@
     - 'Log::LogLite'
     - 'Log::Report'
     - 'Mail::POP3Client'
-    - 'MIME::Lite'
     - 'Net::Azure::StorageClient'
     - 'Net::FTP::Common'
     - 'Net::LDAP'
@@ -303,6 +304,8 @@
     - 'URI::sftp'
     - 'XML::Compile::SOAP::Daemon::AnyDaemon'
     - 'XML::Tidy'
+
+  # BEGIN OLD ZIP PARADE
 
   - name: Install ImgOverlay
     # This is the source for lots of other files we need to install
@@ -329,6 +332,8 @@
       dest:       /var/www/html
       creates:    /var/www/html/yui
       src:        "{{overlay}}/packages/yui-2.9.0.tgz"
+
+# END OLD ZIP PARADE
 
 # BEGIN APPLICATION SERVICE->SYSTEMD SHIM
 
@@ -367,8 +372,10 @@
   #  no longer part of the distribution.
     yum:
       name:
-      - "{{overlay_rpms}}/a2ps-4.14-23.el8.x86_64.rpm"
-      - "{{overlay_rpms}}/groff-perl-1.22.3-18.el8.x86_64.rpm"
+      - "{{rpms}}/a2ps-4.14-23.el8.x86_64.rpm"
+      - "{{rpms}}/groff-perl-1.22.3-18.el8.x86_64.rpm"
       state: present
+    # Disable packages for now until we are ready for them.
+    when: " 0  == 1 "
 
 ...
