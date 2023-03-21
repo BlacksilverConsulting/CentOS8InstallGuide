@@ -5,6 +5,10 @@
   remote_user: root
 
   vars:
+    # Set the interpreter here to 3.9 because some
+    #  Python modules we use aren't updated to 3.11
+    #  on CentOS 9.
+    ansible_python_interpreter: /usr/bin/python3.9
     appgroupname: imaging
     overlay: /root/ImgOverlay-main/var/imaging/resources
     overlay_rpms: "{{overlay}}/RPM/CentOS-{{ansible_distribution_major_version}}"
