@@ -3,6 +3,9 @@
   hosts: localhost
   remote_user: root
 
+# IF YOU NEED THE CLUSTER TO BE IN A DIFFERENT LOCATION, SEE
+# https://gist.github.com/BlacksilverConsulting/cf4789bb2457ca4f56f65d4ebad5c9ab
+
   tasks:
   # We use PGDG here even though CentOS 9 has PostgreSQL 14,
   #  For consistency with CentOS 8 installs that do not.
