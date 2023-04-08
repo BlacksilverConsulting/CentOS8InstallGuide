@@ -129,6 +129,7 @@
       - 'cifs-utils'
       - 'httpd'
       - 'perl-DBI'
+      - 'perl-DBD-Pg'
       - 'perl-App-cpanminus'
       - 'perl-IO-CaptureOutput'
       - 'perl-URI-Encode'
