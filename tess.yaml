@@ -24,6 +24,12 @@
         owner: listener
         group: imaging
 
+    - name: Configure application path to tesseract
+      ansible.builtin.replace:
+        path: /var/imaging/resources/configs/utilities.json
+        regexp: "/usr/local/bin/tesseract"
+        replace: "/usr/bin/tesseract"
+
     - name: Install EPEL repository
       yum:
         name: epel-release
