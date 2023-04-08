@@ -94,7 +94,7 @@
       group: mail
       line: 'listener'
 
-  - name: Provide /etc/init.d for applications that reuiqre it
+  - name: Provide /etc/init.d for applications that require it
     # This is needed for sysupdate.pl to complete
     file:
       state: link
