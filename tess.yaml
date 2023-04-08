@@ -1,0 +1,36 @@
+---
+- name: Tesseract OCR setup
+  hosts: localhost
+  remote_user: root
+
+  vars:
+    subsys_path: /var/imaging/subsys/Templates
+
+  tasks:
+    - name: Check for application's OCR subsystem
+      ansible.builtin.stat:
+        path: "{{ subsys_path }}"
+      register: subsys
+    
+    - name: Stop playbook if OCR subsystem is missing
+      ansible.builtin.fail:
+        msg: "OCR subsystem directory ({{ subsys_path }}) not found!"
+      when: not subsys.stat.exists
+      
+    - name: Enable OCR subsystem
+      ansible.builtin.file:
+        path: "{{ subsys_path }}/.enabled"
+        state: touch
+        owner: listener
+        group: imaging
+
+    - name: Install EPEL repository
+      yum:
+        name: epel-release
+        state: present
+
+    - name: Install Tesseract OCR
+      yum:
+        name: tesseract
+        state: present
+...

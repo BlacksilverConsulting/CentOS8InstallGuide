@@ -61,7 +61,7 @@
       group: mail
       line: 'listener'
 
-  - name: Provide /etc/init.d for applications that reuiqre it
+  - name: Provide /etc/init.d for applications that require it
     file:
       state: link
       src: /etc/rc.d/init.d
