@@ -150,6 +150,7 @@
       - 'foomatic'
       - 'freetds'
       - 'freetds-devel'
+      - 'enscript'
 
 # BEGIN FTP SECTION
 
@@ -367,6 +368,21 @@
       enabled: yes
 
 # END APPLICATION SERVICE->SYSTEMD SHIM
+
+  - name: Create enscript site configuration file
+    ansible.builtin.file:
+      path: /etc/enscriptsite.cfg
+      owner: root
+      group: root
+      state: touch
+    
+    - name: Emulate a2ps site configuration file
+      ansible.builtin.file:
+        src: /etc/enscriptsite.cfg
+        dest: /etc/a2ps-site.cfg
+        state: link
+        owner: root
+        group: root
 
   - name: Install our built packages from the overlay
   # These packages are needed by the application, but 
