@@ -39,4 +39,11 @@
       yum:
         name: tesseract
         state: present
+        
+  - name: install cpan modules for OCR
+    cpanm:
+      name: "{{ item }}"
+      notest: yes
+    loop:
+    - 'IO::Interactive'
 ...
