@@ -16,13 +16,19 @@
       ansible.builtin.fail:
         msg: "OCR subsystem directory ({{ subsys_path }}) not found!"
       when: not subsys.stat.exists
-      
+
+    - name: Check for OCR enable flag
+      ansible.builtin.stat:
+        path: "{{ subsys_path }}/.enabled"
+      register: enabled
+
     - name: Enable OCR subsystem
       ansible.builtin.file:
-        path: "{{ subsys_path }}/.enabled"
+        path: enabled.stat.path
         state: touch
         owner: listener
         group: imaging
+      when: not enabled.stat.exists
 
     - name: Configure application path to tesseract
       ansible.builtin.replace:
@@ -46,4 +52,6 @@
       notest: yes
     loop:
     - 'IO::Interactive'
+    - 'URI::Encode'
+
 ...
