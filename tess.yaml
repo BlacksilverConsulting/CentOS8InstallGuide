@@ -53,5 +53,13 @@
     loop:
     - 'IO::Interactive'
     - 'URI::Encode'
+    
+  - name: Add cronjob to auto-commit unclassified groups
+    cron:
+      name: "Auto-commit scale tickets"
+      special_time: hourly
+      user: listener
+      job: >
+        /usr/bin/perl /var/imaging/bin/img-group-autocommit.pl
 
 ...
