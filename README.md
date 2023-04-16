@@ -113,7 +113,7 @@ After the OS is installed, there are a lot of setup steps. This project includes
 Sign in to the VM as root and run this command:
 
 ```bash
-cd && curl -LJO https://blacksilverconsulting.github.io/OS9/start.sh && bash start.sh
+cd && curl -LJO  https://github.com/BlacksilverConsulting/OS9/raw/main/start.sh && bash start.sh
 ```
 
 This shell script does several things:
