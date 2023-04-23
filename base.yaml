@@ -87,6 +87,17 @@
       path: "/home/{{unprivuser}}/.ssh"
       search_string: "rsa-key-20220410"
 
+  - name: Configure Vi/Vim to expand tabs to spaces
+    lineinfile:
+      backup: true
+      create: true
+      group: root
+      line: "set expandtab"
+      mode: "0744"
+      owner: root
+      path: "/etc/vimrc.local"
+      search_string: "set expandtab"
+      
   - name: Disable SELinux
     ini_file:
       path: /etc/selinux/config
