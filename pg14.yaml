@@ -3,100 +3,103 @@
   hosts: localhost
   remote_user: root
 
-# IF YOU NEED THE CLUSTER TO BE IN A DIFFERENT LOCATION, SEE
-# https://gist.github.com/BlacksilverConsulting/cf4789bb2457ca4f56f65d4ebad5c9ab
+  # IF YOU NEED THE CLUSTER TO BE IN A DIFFERENT LOCATION, SEE
+  # https://gist.github.com/BlacksilverConsulting/cf4789bb2457ca4f56f65d4ebad5c9ab
 
   tasks:
   # We use PGDG here even though CentOS 9 has PostgreSQL 14,
   #  For consistency with CentOS 8 installs that do not.
 
-  - name: Install RPM Signing Key from PostgreSQL Global Development Group (PGDG)
-    rpm_key:
-      key: https://ftp.postgresql.org/pub/repos/yum/RPM-GPG-KEY-PGDG-14
-      state: present
+    - name: Install RPM Signing Key from PostgreSQL Global Development Group (PGDG)
+      ansible.builtin.rpm_key:
+        key: https://ftp.postgresql.org/pub/repos/yum/RPM-GPG-KEY-PGDG-14
+        state: present
 
-  - name: Configure official PostgreSQL package repository
-    yum_repository:
-      name: PostgreSQL14
-      description: PostgreSQL ORDBMS version 14 from PGDG
-      baseurl: "https://ftp.postgresql.org/pub/repos/yum/14/redhat/rhel-{{ansible_distribution_major_version}}-x86_64/"
-      state: present
+    - name: Configure official PostgreSQL package repository
+      ansible.builtin.yum_repository:
+        name: PostgreSQL14
+        description: PostgreSQL ORDBMS version 14 from PGDG
+        baseurl: https://ftp.postgresql.org/pub/repos/yum/14/redhat/rhel-{{ ansible_distribution_major_version }}-x86_64/
+        state: present
 
-  - name: Install PostgreSQL 14 client
-    yum:
-      name: "postgresql14"
-      state: latest
-      update_cache: yes
-      disablerepo: "appstream"
+    - name: Install PostgreSQL 14 client
+      ansible.builtin.yum:
+        name: postgresql14
+        state: present
+        update_cache: true
+        disablerepo: appstream
 
-  - name: Create PostgreSQL client system-wide configuration directory
-    # This is needed for the CLI configuration file that is 
+    - name: Create PostgreSQL client system-wide configuration directory
+    # This is needed for the CLI configuration file that is
     #  about to be installed
-    file:
-      path: /etc/sysconfig/pgsql
-      state: directory
-      group: root
-      owner: root
-      mode: 0755
+      ansible.builtin.file:
+        path: /etc/sysconfig/pgsql
+        state: directory
+        group: root
+        owner: root
+        mode: "0755"
 
-  - name: Configure PostgreSQL client CLI
+    - name: Configure PostgreSQL client CLI
     # This makes psql much nicer to work with, things like
     #  persistent history and a special symbol (¤) for nulls
     # This pulls directly from GitHub instead of expecting /root/ImgOverlay-main
     #  to already exist, so this playbook is not dependent on dm-?.yaml.
-    get_url:
-      url: https://blacksilverconsulting.github.io/OS9/psqlrc
-      dest: /etc/sysconfig/pgsql/psqlrc
-      mode: 0644
-      group: root
-      owner: root
+      ansible.builtin.get_url:
+        url: https://blacksilverconsulting.github.io/OS9/psqlrc
+        dest: /etc/sysconfig/pgsql/psqlrc
+        mode: "0644"
+        group: root
+        owner: root
 
-  - name: Install PostgreSQL 14 server
-    yum:
-      name: "@postgresqldbserver14"
-      state: latest
-      disablerepo: appstream
+    - name: Install PostgreSQL 14 server
+      ansible.builtin.yum:
+        name: "@postgresqldbserver14"
+        state: present
+        disablerepo: appstream
 
-  - name: Add PostgreSQL 14 service dependency on autofs
+    - name: Add PostgreSQL 14 service dependency on autofs
     # This is needed for configurations where the DB cluster
     #  is on a disk that is mounted by autofs
-    ini_file:
-      path: /etc/systemd/system/postgresql-14.service.d/override.conf
-      section: Unit
-      option: after
-      value: "autofs.service"
-      no_extra_spaces: yes
+      community.general.ini_file:
+        path: /etc/systemd/system/postgresql-14.service.d/override.conf
+        section: Unit
+        option: after
+        value: autofs.service
+        no_extra_spaces: true
+        mode: "0644"
 
-  - name: Add cronjob to vacuum databases regularly
-    # This is needed to comfort grumpy old DBAs that don't 
+    - name: Add cronjob to vacuum databases regularly
+    # This is needed to comfort grumpy old DBAs that don't
     #  trust autovacuum yet
-    cron:
-      name: "Nightly database vacuum"
-      special_time: daily
-      user: postgres
-      job: >
-        /bin/bash -c 'for db in $(/bin/psql -AqtX -U postgres -d postgres -c "SELECT datname FROM pg_Database WHERE datAllowConn;"); do /bin/psql -q -d $db -c "VACUUM ANALYZE;"; done'
+      ansible.builtin.cron:
+        name: Nightly database vacuum
+        special_time: daily
+        user: postgres
+        job: >
+          /bin/bash -c 'for db in $(/bin/psql -AqtX -U postgres -d postgres
+          -c "SELECT datname FROM pg_Database WHERE datAllowConn;");
+          do /bin/psql -q -d $db -c "VACUUM ANALYZE;"; done'
 
-  - name: Add Ansible support for PostgreSQL configuration
+    - name: Add Ansible support for PostgreSQL configuration
     # This is needed for dm.yaml to create application-specific
     #  database users
-    community.general.ansible_galaxy_install:
-      name: community.postgresql
-      type: collection
+      community.general.ansible_galaxy_install:
+        name: community.postgresql
+        type: collection
 
-  - name: Check if PostgreSQL cluster is initialized
-    ansible.builtin.stat:
-      path: /var/lib/pgsql/14/data/pg_hba.conf
-    register: pg14data
+    - name: Check if PostgreSQL cluster is initialized
+      ansible.builtin.stat:
+        path: /var/lib/pgsql/14/data/pg_hba.conf
+      register: pg14data
 
-  - name: Initialize PostgreSQL cluster
-    shell: "postgresql-14-setup initdb"
-    when: not pg14data.stat.exists
- 
-  - name: Start and enable PostgreSQL service
-    service: 
-      name: postgresql-14 
-      state: started 
-      enabled: yes
+    - name: Initialize PostgreSQL cluster
+      ansible.builtin.command: postgresql-14-setup initdb
+      when: not pg14data.stat.exists
+      register: initdb
+      changed_when: initdb.rc == 0
 
-...
+    - name: Start and enable PostgreSQL service
+      ansible.builtin.service:
+        name: postgresql-14
+        state: started
+        enabled: true
