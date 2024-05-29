@@ -209,6 +209,7 @@
       loop:
         - ftp
         - http
+        - smb
 
     - name: Change ImageMagick policy XML 1/4
       community.general.xml:
