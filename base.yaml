@@ -52,6 +52,7 @@
           - sudo
           - tmpwatch
           - console-login-helper-messages-issuegen
+          - lsb_release
 
     - name: Start autofs service with OS
       ansible.builtin.service:
