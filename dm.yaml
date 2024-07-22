@@ -52,6 +52,8 @@
       become: true
       become_user: postgres
 
+  ### TODO: Skip this if the source file doesn't exist
+  ### (To work correctly with pg13.yaml)
     - name: Add systemd service alias for PostgreSQL 14
     # This is needed for application-specific automation
     #  that expects `service postgresql stop` to work
@@ -60,6 +62,8 @@
         state: link
         path: /usr/lib/systemd/system/postgresql.service
 
+### TODO Skip this if the source path doesn't exist
+### (To work correctly with pg13.yaml)
     - name: Create /var/lib/pgsql/data symlink
     # This is needed for sysupdate.pl to complete
       ansible.builtin.file:
