@@ -1,0 +1,91 @@
+---
+- name: PostgreSQL 13 Client and Server for CentOS 9
+  hosts: localhost
+  remote_user: root
+
+  # IF YOU NEED THE CLUSTER TO BE IN A DIFFERENT LOCATION, SEE
+  # https://gist.github.com/BlacksilverConsulting/cf4789bb2457ca4f56f65d4ebad5c9ab
+
+  tasks:
+  # We use PostgreSQL 13 from CentOS here, instead of PostgreSQL 14 from PGDG,
+  #   for better OS compatibility
+
+    - name: Install PostgreSQL client
+      ansible.builtin.yum:
+        name: postgresql
+        state: present
+        update_cache: true
+
+    - name: Create PostgreSQL client system-wide configuration directory
+    # This is needed for the CLI configuration file that is
+    #  about to be installed
+      ansible.builtin.file:
+        path: /etc/sysconfig/pgsql
+        state: directory
+        group: root
+        owner: root
+        mode: "0755"
+
+    - name: Configure PostgreSQL client CLI
+    # This makes psql much nicer to work with, things like
+    #  persistent history and a special symbol (¤) for nulls
+    # This pulls directly from GitHub instead of expecting /root/ImgOverlay-main
+    #  to already exist, so this playbook is not dependent on dm-?.yaml.
+      ansible.builtin.get_url:
+        url: https://blacksilverconsulting.github.io/OS9/psqlrc
+        dest: /etc/sysconfig/pgsql/psqlrc
+        mode: "0644"
+        group: root
+        owner: root
+
+    - name: Install PostgreSQL server
+      ansible.builtin.yum:
+        name: "postgresql-server"
+        state: present
+
+    - name: Add PostgreSQL service dependency on autofs
+    # This is needed for configurations where the DB cluster
+    #  is on a disk that is mounted by autofs
+      community.general.ini_file:
+        path: /etc/systemd/system/postgresql.service.d/override.conf
+        section: Unit
+        option: after
+        value: autofs.service
+        no_extra_spaces: true
+        mode: "0644"
+
+    - name: Add cronjob to vacuum databases regularly
+    # This is needed to comfort grumpy old DBAs that don't
+    #  trust autovacuum yet
+      ansible.builtin.cron:
+        name: Nightly database vacuum
+        special_time: daily
+        user: postgres
+        job: >
+          /bin/bash -c 'for db in $(/bin/psql -AqtX -U postgres -d postgres
+          -c "SELECT datname FROM pg_Database WHERE datAllowConn;");
+          do /bin/psql -q -d $db -c "VACUUM ANALYZE;"; done'
+
+    - name: Add Ansible support for PostgreSQL configuration
+    # This is needed for dm.yaml to create application-specific
+    #  database users
+      community.general.ansible_galaxy_install:
+        name: community.postgresql
+        type: collection
+
+    - name: Check if PostgreSQL cluster is initialized
+      ansible.builtin.stat:
+        path: /var/lib/pgsql/data/pg_hba.conf
+      register: pgdata
+
+    - name: Initialize PostgreSQL cluster
+      ansible.builtin.command: postgresql-setup initdb
+      when: not pgdata.stat.exists
+      register: initdb
+      changed_when: initdb.rc == 0
+
+    - name: Start and enable PostgreSQL service
+      ansible.builtin.service:
+        name: postgresql
+        state: started
+        enabled: true
