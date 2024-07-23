@@ -33,6 +33,7 @@
         - listener
         - dbmaint
         - mailer
+        - backup
 
     # BEGIN POSTGRESQL SECTION
 
