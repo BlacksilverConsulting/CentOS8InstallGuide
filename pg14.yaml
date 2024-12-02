@@ -63,7 +63,7 @@
       community.general.ini_file:
         path: /etc/systemd/system/postgresql-14.service.d/override.conf
         section: Unit
-        option: after
+        option: After
         value: autofs.service
         no_extra_spaces: true
         mode: "0644"
