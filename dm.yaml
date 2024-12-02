@@ -53,8 +53,11 @@
       become: true
       become_user: postgres
 
-  ### TODO: Skip this if the source file doesn't exist
-  ### (To work correctly with pg13.yaml)
+    - name: Check for PostgreSQL 14
+      ansible.builtin.stat:
+        path: /usr/lib/systemd/system/postgresql-14.service
+      register: pg14
+
     - name: Add systemd service alias for PostgreSQL 14
     # This is needed for application-specific automation
     #  that expects `service postgresql stop` to work
@@ -62,6 +65,7 @@
         src: /usr/lib/systemd/system/postgresql-14.service
         state: link
         path: /usr/lib/systemd/system/postgresql.service
+     when: pg14.stat.exists
 
 ### TODO Skip this if the source path doesn't exist
 ### (To work correctly with pg13.yaml)
@@ -71,6 +75,7 @@
         state: link
         src: /var/lib/pgsql/14/data
         path: /var/lib/pgsql/data
+      when: pg14.stat.exists
 
     - name: Create fake init.d file
     # This is required for sysupdate 2005091601 to work correctly.
