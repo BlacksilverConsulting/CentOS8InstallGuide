@@ -65,7 +65,7 @@
         src: /usr/lib/systemd/system/postgresql-14.service
         state: link
         path: /usr/lib/systemd/system/postgresql.service
-     when: pg14.stat.exists
+      when: pg14.stat.exists
 
 ### TODO Skip this if the source path doesn't exist
 ### (To work correctly with pg13.yaml)
